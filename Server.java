@@ -1,66 +1,64 @@
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Date;
+import java.net.*;
 import java.io.*;
 
-/**
- * A TCP server that runs on port 9090.  When a client connects, it
- * sends the client the current date and time, then closes the
- * connection with that client.  Arguably just about the simplest
- * server you can write.
+/*
+//Server takes a string, converts it into two numbers adds them
+//and sends the sum back to the client.
  */
 public class Server {
 
-    /**
-     * Runs the server.
-     */
+
     public static void main(String[] args) throws IOException {
-        ServerSocket listener = new ServerSocket(9090);
+    	//server starts listening on port 8080
+        ServerSocket listen = new ServerSocket(8080);
+
        try
         {
  
-            int port = 2500;
+            int port = 9000; //used to communicate with client; can a number of ports
             ServerSocket serverSocket = new ServerSocket(port);
-            System.out.println("Server Started and listening to the port 25000");
+            System.out.println("Server waiting on client");
  
-            //Server is running always. This is done using this while(true) loop
+            //server will hang until client closes it
             while(true) 
             {
-                //Reading the message from the client
-               Socket socket = serverSocket.accept();
-                InputStream is = socket.getInputStream();
-                InputStreamReader isr = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(isr);
-                String number = br.readLine();
+                //Reads the numbers from the client
+               	Socket socket = serverSocket.accept();
+                InputStream input = socket.getInputStream();
+                InputStreamReader inputReader = new InputStreamReader(input);
+                BufferedReader buffer = new BufferedReader(inputReader);
+                String number = buffer.readLine();
                 System.out.println("Message received from client is "+number);
  
-                //Multiplying the number by 2 and forming the return message
+               
                 String returnMessage;
-                try
-                {
-                    int numberInIntFormat = Integer.parseInt(number);
-                    int returnValue = numberInIntFormat*2;
+        
+                	//splits the string into two numbers
+                	String splitStr=number.substring(0,number.indexOf(" "));
+                	String splitStr2=number.substring(number.indexOf(" ")+1,number.length());
+
+                	//string back to int to create sum
+                    int numberInIntFormat = Integer.parseInt(splitStr);
+                    int numberInIntFormat2=Integer.parseInt(splitStr2);
+                   
+                    //sum the two numbers
+                    int returnValue = numberInIntFormat + numberInIntFormat2;
+
+                    //put into string message to be sent back to client
                     returnMessage = String.valueOf(returnValue) + "\n";
-                }
-                catch(NumberFormatException e)
-                {
-                    //Input was not a number. Sending proper message back to client.
-                    returnMessage = "Please send a proper number\n";
-                }
+                
  
                 //Sending the response back to the client.
                 OutputStream os = socket.getOutputStream();
                 OutputStreamWriter osw = new OutputStreamWriter(os);
                 BufferedWriter bw = new BufferedWriter(osw);
                 bw.write(returnMessage);
-                System.out.println("Message sent to the client is "+returnMessage);
+                System.out.println("The sum is "+returnMessage);
                 bw.flush();
             }
         }
         finally {
-            listener.close();
+            listen.close();
         }
     }
 }

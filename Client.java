@@ -1,49 +1,43 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Socket;
+import java.net.*;
 import java.io.*;
-import java.net.InetAddress;
-import java.net.Socket;
-
-import javax.swing.JOptionPane;
-
-/**
- * Trivial client for the date server.
- */
+import java.util.Scanner;
+/*
+//Client sends two numbers and expects the sum from server
+ //
+ **/
 public class Client {
 
-    /**
-     * Runs the client as an application.  First it displays a dialog
-     * box asking for the IP address or hostname of a host running
-     * the date server, then connects to it and displays the date that
-     * it serves.
-     */
 
     public static void main(String[] args) throws IOException {
         String host = "localhost";
-            int port = 2500;
+            int port = 9000;
             InetAddress address = InetAddress.getByName(host);
           Socket  socket = new Socket(address, port);
  
             //Send the message to the server
-            OutputStream os = socket.getOutputStream();
-            OutputStreamWriter osw = new OutputStreamWriter(os);
-            BufferedWriter bw = new BufferedWriter(osw);
+            OutputStream outSteam = socket.getOutputStream();
+            OutputStreamWriter outStreamWriter = new OutputStreamWriter(outSteam);
+            BufferedWriter buffer = new BufferedWriter(outStreamWriter);
+            Scanner scan=new Scanner(System.in);
+ 			
+ 			System.out.println("Please enter first number: ");
+            String number = scan.nextLine();
+            System.out.println("Please enter second number: ");
+            String num2	  = scan.nextLine();
  
-            String number = "2";
- 
-            String sendMessage = number + "\n";
-            bw.write(sendMessage);
-            bw.flush();
-            System.out.println("Message sent to the server : "+sendMessage);
+ 			//separate the two numbers so buffer can read them as separate
+            String mssg = number + " "+num2+"\n";
+            buffer.write(mssg);
+            buffer.flush();
+            System.out.println("Numbers sent to server:" +number +" " +num2);
  
             //Get the return message from the server
-            InputStream is = socket.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            String message = br.readLine();
-            System.out.println("Message received from the server : " +message);
+            InputStream input = socket.getInputStream();
+            InputStreamReader inputReader = new InputStreamReader(input);
+            BufferedReader bufferReader = new BufferedReader(inputReader);
+            String message = bufferReader.readLine();
+
+            System.out.println("Server says : " +message);
         System.exit(0);
     }
 }
