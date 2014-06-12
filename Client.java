@@ -7,12 +7,11 @@ import java.util.Scanner;
  **/
 public class Client {
 
-
     public static void main(String[] args) throws IOException {
         String host = "localhost";
-            int port = 9000;
-            InetAddress address = InetAddress.getByName(host);
-          Socket  socket = new Socket(address, port);
+        int port = 9000;
+        InetAddress address = InetAddress.getByName(host);
+        Socket  socket = new Socket(address, port);
  
             //Send the message to the server
             OutputStream outSteam = socket.getOutputStream();
@@ -21,15 +20,15 @@ public class Client {
             Scanner scan=new Scanner(System.in);
  			
  			System.out.println("Please enter first number: ");
-            String number = scan.nextLine();
+            String num1 = scan.nextLine();
             System.out.println("Please enter second number: ");
             String num2	  = scan.nextLine();
  
  			//separate the two numbers so buffer can read them as separate
-            String mssg = number + " "+num2+"\n";
+            String mssg = num1 + " "+num2+"\n";
             buffer.write(mssg);
             buffer.flush();
-            System.out.println("Numbers sent to server:" +number +" " +num2);
+            System.out.println("Numbers sent to server:" +num1 +" " +num2);
  
             //Get the return message from the server
             InputStream input = socket.getInputStream();
@@ -37,7 +36,7 @@ public class Client {
             BufferedReader bufferReader = new BufferedReader(inputReader);
             String message = bufferReader.readLine();
 
-            System.out.println("Server says : " +message);
+            System.out.println("Server says : " + message);
         System.exit(0);
     }
 }

@@ -15,14 +15,14 @@ public class Server {
        try
         {
  
-            int port = 9000; //used to communicate with client; can a number of ports
+            int port = 9000; //used to communicate with client; 
             ServerSocket serverSocket = new ServerSocket(port);
             System.out.println("Server waiting on client");
  
             //server will hang until client closes it
             while(true) 
             {
-                //Reads the numbers from the client
+                //Reads in the numbers from client
                	Socket socket = serverSocket.accept();
                 InputStream input = socket.getInputStream();
                 InputStreamReader inputReader = new InputStreamReader(input);
